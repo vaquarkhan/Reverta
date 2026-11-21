@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 — Why rollback is missing</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="02-run-the-demo.html">Next lesson</a></div>
+    </nav>
+    <p class="kicker">Lesson 01</p>
+    <h1>MCP calls tools. It does not undo them.</h1>
+    <p>The 2026-07-28 Model Context Protocol is stateless. A request carries <code>io.modelcontextprotocol/protocolVersion</code> and <code>io.modelcontextprotocol/clientCapabilities</code> in <code>_meta</code>. Tools are described with JSON Schema 2020-12. That is enough to invoke a function. It is not a transaction.</p>
+    <h2>What the base protocol leaves open</h2>
+    <ul>
+      <li><strong>Hints are not policy.</strong> <code>readOnlyHint</code>, <code>destructiveHint</code>, and <code>idempotentHint</code> are untrusted annotations. An agent, or a compromised tool catalog, can claim a charge is read-only.</li>
+      <li><strong>A lost response is a second mutation.</strong> If the client times out and retries <code>tools/call</code>, MCP does not define a deduplication key. The second call can transfer the inventory again.</li>
+      <li><strong>Partial plans have no inverse.</strong> Step 1 can succeed, step 2 can succeed, and step 3 can return HTTP 500. Nothing in the protocol tells the client to void step 2 and then step 1.</li>
+      <li><strong>Timeouts collapse into booleans.</strong> A gateway that received the request and then dropped the response looks the same as a gateway that never received it. Retrying one of those is safe. Retrying the other is not.</li>
+    </ul>
+    <h2>The three reversibility classes</h2>
+    <p>Every mutating tool in a Reverta manifest is one of these. The model cannot pick a different class at call time. The signed manifest is the authority.</p>
+    <table>
+      <tr><th>Class</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>ATOMIC_BRANCHABLE</td><td>The mutation can run on an isolated branch and be published or discarded.</td><td>A ledger transfer, a lakehouse write.</td></tr>
+      <tr><td>COMPENSATABLE</td><td>There is a deterministic inverse call. The mapping is an expression over the forward input and output.</td><td><code>void_dispatch</code> after <code>dispatch_carrier</code>.</td></tr>
+      <tr><td>IRREVERSIBLE</td><td>There is no honest inverse. The engine pauses for a person before the live call, and a later failure marks the effect orphaned instead of pretending it was undone.</td><td>Sending a wire, sending an email.</td></tr>
+    </table>
+    <h2>Where Reverta sits</h2>
+    <p>The proxy speaks ordinary JSON-RPC. A Spring AI 2.1 client, a Python script, or a STDIO agent all land on the same coordinator. Before a live mutation, the engine writes the intent to a write-ahead log. After a failure, it walks completed steps in reverse topological order and compensates each one.</p>
+    <div class="callout">The completed rollback is a successful JSON-RPC result whose snapshot state is <code>ROLLED_BACK</code>. A protocol error is reserved for a request the engine will not even attempt.</div>
+    <p><a href="02-run-the-demo.html">Next: run the demo and watch a carrier failure undo two branches.</a></p>
+  </div>
+</body>
+</html>

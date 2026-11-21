@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>05 — Ledger, replay, and chaos</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="04-policy-and-approval.html">Previous</a><a href="06-sdks.html">Next</a></div>
+    </nav>
+    <p class="kicker">Lesson 05</p>
+    <h1>The chain shows its edits. Replay stays offline.</h1>
+    <p>Every sealed entry stores <code>seq</code>, <code>txId</code>, <code>stepId</code>, <code>prevEntrySha256</code>, <code>agentReasoningHash</code>, <code>toolName</code>, <code>sanitizedInput</code>, the pre and post state pointers, <code>compensationStatus</code>, <code>state</code>, and <code>entryHash</code>. The hash is SHA-256 of the canonical body. The first previous hash is 64 zero characters. The raw reasoning text is never stored, only its hash.</p>
+    <p>Values whose keys match password, secret, token, authorization, api key, ssn, card, cvv, or credential are replaced with <code>[REDACTED]</code> before the entry is sealed.</p>
+    <h2>What tamper-evident means here</h2>
+    <ul>
+      <li><code>MATCH</code> — the anchor equals the tip of a valid chain.</li>
+      <li><code>HEALED</code> — the anchor is a prefix, or a non-empty chain has no anchor yet. That is the crash window between the frame fsync and the anchor write. Recovery writes the anchor forward.</li>
+      <li>A broken hash, a broken previous link, or an anchor that is not in the chain raises <code>AtpLedgerTampered</code>.</li>
+    </ul>
+    <div class="callout">Deleting both the log and the anchor leaves nothing to disagree with. The chain does not detect that wipe. Treat the anchor file, or the anchor row, as part of the evidence.</div>
+    <h2>Replay</h2>
+    <pre>java -jar mcp-tx-proxy/target/tx-engine.jar replay \
+  --tx cli-tx --wal-dir ./data --sandbox --up-to-step 3</pre>
+    <p><code>--sandbox</code> is mandatory. Without it the command refuses, because live replay is not permitted. <code>--up-to-step</code> is 1-based. Zero means the whole transaction. A positive limit stops before compensation entries and before steps past the cutoff. Replay checks that each recorded state edge is legal. It does not call tools. An illegal edge is <code>AtpReplayDivergence</code> (−31806).</p>
+    <h2>Chaos metrics</h2>
+    <p>The harness runs one plan under HTTP 500, HTTP 429, a timeout before the handler, a timeout after the handler, and a missing-argument hallucination.</p>
+    <pre>java -jar mcp-tx-proxy/target/tx-engine.jar chaos --out chaos-bench/out/results.csv</pre>
+    <p>Columns are <code>mode,fault,step,recovered,orphaned,mttr_nanos,final_state</code>. The engine column is a real saga. The other column is a simulated executor that does not compensate, so the CSV can compare orphan rates. It is not a second live agent. A 500 rolls back with no orphan. A single 429 or timeout is retried, because <code>forwardRetries</code> is 2 and the fault fires once, and the plan can still commit.</p>
+    <p><a href="06-sdks.html">Next: call the same proxy from Python or Java.</a></p>
+  </div>
+</body>
+</html>

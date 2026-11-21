@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>States — Reverta</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="../tutorials/index.html">Tutorials</a><a href="errors.html">Errors</a><a href="commands.html">Commands</a></div>
+    </nav>
+    <p class="kicker">Reference</p>
+    <h1>Nine states, and the edges between them.</h1>
+    <p>A self-edge is allowed. Any other edge that is not listed here is <code>AtpInvalidTransaction</code>. <code>COMMITTED</code> and <code>ROLLED_BACK</code> are terminal: their outgoing sets are empty.</p>
+    <div class="flow">
+      <span>INIT</span><i>→</i><span>SHADOW</span><i>→</i><span>POLICY</span><i>→</i><span>COMMITTING</span><i>→</i><span>COMMITTED</span>
+    </div>
+    <table>
+      <tr><th>From</th><th>To</th></tr>
+      <tr><td>INIT</td><td>SHADOW_EXECUTING, ROLLED_BACK</td></tr>
+      <tr><td>SHADOW_EXECUTING</td><td>POLICY_EVAL, UNKNOWN_RECONCILING, COMPENSATING, ESCALATED_HITL</td></tr>
+      <tr><td>POLICY_EVAL</td><td>COMMITTING, COMPENSATING, ESCALATED_HITL</td></tr>
+      <tr><td>COMMITTING</td><td>COMMITTED, UNKNOWN_RECONCILING, COMPENSATING, ESCALATED_HITL</td></tr>
+      <tr><td>UNKNOWN_RECONCILING</td><td>SHADOW_EXECUTING, COMMITTING, COMPENSATING, ESCALATED_HITL, COMMITTED, POLICY_EVAL</td></tr>
+      <tr><td>COMPENSATING</td><td>ROLLED_BACK, ESCALATED_HITL, UNKNOWN_RECONCILING</td></tr>
+      <tr><td>ESCALATED_HITL</td><td>POLICY_EVAL, COMMITTING, COMPENSATING, ROLLED_BACK, UNKNOWN_RECONCILING</td></tr>
+    </table>
+    <h2>Unknown outcomes</h2>
+    <p>The intent is persisted before the external call. If the process dies, or the handler reports unknown, recovery moves the transaction to <code>UNKNOWN_RECONCILING</code> and asks the reconciliation tool, or the idempotency store, whether the effect exists. Found means the original phase succeeded. Not found, with attempts left, retries. Otherwise the hold is <code>UNKNOWN</code> and a person decides. HTTP 500 is a definite failure. HTTP 429 is retryable. A timeout after the handler ran is unknown, so a later reconcile can see the effect and will not apply it twice.</p>
+    <h2>Rollback order</h2>
+    <p>If no step declares <code>dependsOn</code>, the plan is a chain. If any step declares dependencies, every dependency is explicit and a cycle rolls back from <code>INIT</code>. Compensation walks touched steps in reverse topological order. A live branch is restored or the mapped inverse tool is invoked. A failed live call that never applied is discarded, not inverted. A live irreversible step is marked orphaned.</p>
+    <p>Normative detail is in <a href="https://github.com/vaquarkhan/Reverta/blob/main/spec/RFC-0001-core-protocol.md">RFC-0001</a>.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>06 — Python, Java, and MCP</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="05-ledger-replay-chaos.html">Previous</a><a href="../reference/commands.html">Commands</a></div>
+    </nav>
+    <p class="kicker">Lesson 06</p>
+    <h1>Three clients, one JSON-RPC surface.</h1>
+    <p>Every MCP method and every <code>tx/*</code> method requires protocol version <code>2026-07-28</code> and a client-capabilities object. The SDKs send both. You do not add an <code>initialize</code> handshake. The 2026-07-28 profile is stateless.</p>
+    <h2>Python</h2>
+    <p>The package in <code>sdks/python</code> uses only the standard library.</p>
+    <pre>from agent_tx import TransactionClient, compensatable_tool
+
+@compensatable_tool(
+    "transfer_inventory", "Moves stock", {"type": "object"},
+    "transfer_inventory", {"sku": "input.sku"},
+    idempotency_key_path="$.input.transfer_id")
+def transfer(sku):
+    return sku
+
+client = TransactionClient("http://127.0.0.1:8080")
+client.execute("tx-1", [{"tool": "reserve_credit", "arguments": {
+    "transfer_id": "a", "amount": 1
+}}], "reserve before capture")</pre>
+    <p>The decorator publishes both <code>_meta</code> and the <code>x-atp-transaction</code> alias. That advertisement still has to match a signed manifest on the server. <code>execute</code>, <code>resume</code>, <code>abort</code>, <code>status</code>, <code>replay</code>, and <code>tools</code> are the methods. A JSON-RPC error becomes <code>TransactionError</code>.</p>
+    <h2>Java</h2>
+    <pre>TxClient client = new TxClient("http://127.0.0.1:8080/");
+Map&lt;String, Object&gt; snap = client.execute("sdk-1", List.of(Map.of(
+    "tool", "reserve_credit",
+    "arguments", Map.of("transfer_id", "sdk", "amount", 1))), "sdk");
+client.replay("sdk-1", 1);</pre>
+    <p><code>ToolMetadata.compensatable</code> builds the same advertisement map. A trailing slash on the base URL is stripped before <code>/mcp</code> is appended.</p>
+    <h2>Spring AI and STDIO</h2>
+    <p>Point a Spring AI 2.1 Streamable HTTP client at <code>http://127.0.0.1:8080/mcp</code>. This repository does not embed Spring. If the <code>Accept</code> header contains <code>text/event-stream</code>, the proxy answers with one Server-Sent Event. Otherwise the body is <code>application/json</code>.</p>
+    <pre>java -jar mcp-tx-proxy/target/tx-engine.jar stdio</pre>
+    <p>STDIO is one JSON object per line. Blank lines are ignored. The methods are <code>server/discover</code>, <code>tools/list</code>, <code>tools/call</code>, <code>tx/execute</code>, <code>tx/resume</code>, <code>tx/abort</code>, <code>tx/status</code>, <code>tx/replay</code>, and <code>tx/ledger</code>.</p>
+    <div class="callout"><code>tools/call</code> is a one-step execute. <code>isError</code> stays false when the saga finishes, including a clean rollback. Read <code>structuredContent.state</code>. Use <code>tx/resume</code> when that state is <code>ESCALATED_HITL</code>.</div>
+    <p>The <a href="../reference/states.html">state reference</a> lists every legal edge. The <a href="../reference/errors.html">error reference</a> lists the −31801 through −31812 codes.</p>
+  </div>
+</body>
+</html>

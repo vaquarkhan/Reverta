@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>04 — Policy and approval</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="03-declare-a-tool.html">Previous</a><a href="05-ledger-replay-chaos.html">Next</a></div>
+    </nav>
+    <p class="kicker">Lesson 04</p>
+    <h1>The gate runs before the live call.</h1>
+    <p>Shadow execution produces a diff: rows changed, schema changes, and a money total. Rules are expressions that must return a boolean. Anything else denies. An evaluation error denies. The demo manifest carries two rules.</p>
+    <pre>tableFraction('customer_ledger') &lt;= 0.75    onFail DENY
+financialDelta &lt;= 1000                      onFail DENY</pre>
+    <p><code>tableFraction</code> is changed rows divided by the previous row count, with a floor of one row. A missing table contributes zero. <code>financialDelta</code> sums absolute money movements. On the in-memory ledger, only balance decreases count, so a transfer is not added twice. <code>schemaChanged(table)</code> and <code>rowDelta(table)</code> are also available. Builtins are <code>abs</code>, <code>len</code>, <code>str</code>, and <code>coalesce</code>. <code>&amp;&amp;</code> and <code>||</code> short-circuit. Division uses scale 8, half up.</p>
+    <h2>DENY wins. Irreversible still pauses.</h2>
+    <p>If any rule denies, the transaction compensates and ends <code>ROLLED_BACK</code> with <code>AtpPolicyDenied</code>. A person is not asked to override a deny. If every rule allows and a step is <code>IRREVERSIBLE</code>, the engine still parks the transaction in <code>ESCALATED_HITL</code> with hold <code>APPROVAL_IRREVERSIBLE</code>. A rule with <code>onFail: PAUSE</code> parks with <code>APPROVAL_POLICY</code> when it fails and nothing denied.</p>
+    <h2>Resume without a waiting thread</h2>
+    <p>The snapshot is already on the write-ahead log. The HTTP request that paused has finished. Hours later:</p>
+    <pre>{"jsonrpc":"2.0","id":1,"method":"tx/resume",
+ "params":{"txId":"ui-wire-2","decision":"APPROVE"},
+ "_meta":{
+   "io.modelcontextprotocol/protocolVersion":"2026-07-28",
+   "io.modelcontextprotocol/clientCapabilities":{}
+ }}</pre>
+    <ul>
+      <li><code>APPROVE</code> is valid for an approval hold and moves the transaction into <code>COMMITTING</code>.</li>
+      <li><code>REJECT</code> is valid for an approval hold and starts compensation.</li>
+      <li><code>RETRY</code> is valid for an unknown outcome or a failed compensation, not for an approval hold.</li>
+    </ul>
+    <p>Abort of a terminal transaction returns the snapshot. Abort of an unknown outcome or an orphaned irreversible effect refuses to guess: the engine will not invent a success or a rollback.</p>
+    <h2>Plans that mix a wire and a later failure</h2>
+    <p>Irreversible steps are deferred until reversible work has committed, unless a reversible step depends on the irreversible one. If the wire commits and a later step fails, rollback marks the live wire <code>ORPHAN</code> and seals <code>ESCALATED_HITL</code> with <code>AtpIrreversibleBlocked</code>. That is the honest outcome. There is no inverse for money that already left.</p>
+    <p><a href="05-ledger-replay-chaos.html">Next: read the chain and reproduce the failure offline.</a></p>
+  </div>
+</body>
+</html>

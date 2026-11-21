@@ -4,6 +4,18 @@ A transactional proxy and coordinator for tool-calling agents. MCP 2026-07-28 de
 
 The specification is in [`spec/RFC-0001-core-protocol.md`](spec/RFC-0001-core-protocol.md). The requirements and the stack decisions are in [`spec/TRD.md`](spec/TRD.md). The license is Apache-2.0.
 
+Guides and the published site live in [`docs/`](docs/index.html):
+
+| Page | What it teaches |
+| --- | --- |
+| [Overview](docs/index.html) | What the engine guarantees |
+| [Tutorials](docs/tutorials/index.html) | Six lessons, from the protocol gap through the SDKs |
+| [States](docs/reference/states.html) | The nine saga states and their edges |
+| [Errors](docs/reference/errors.html) | JSON-RPC codes −31801 through −31812 |
+| [Commands](docs/reference/commands.html) | `tx-engine`, environment variables, and demo routes |
+
+GitHub Pages publishes `docs/` from `main`. After the pages workflow runs, the site is [vaquarkhan.github.io/Reverta](https://vaquarkhan.github.io/Reverta/).
+
 ## Layout
 
 | Path | Role |
@@ -14,6 +26,7 @@ The specification is in [`spec/RFC-0001-core-protocol.md`](spec/RFC-0001-core-pr
 | `sdks/java/` | `TxClient` for the proxy |
 | `sdks/python/` | Stdlib client and `@compensatable_tool` |
 | `examples/` | Docker Compose demo |
+| `docs/` | GitHub Pages site: tutorials and reference |
 | `chaos-bench/` | How to emit the recovery CSV |
 
 ## Build

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>03 — Declare a tool</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="02-run-the-demo.html">Previous</a><a href="04-policy-and-approval.html">Next</a></div>
+    </nav>
+    <p class="kicker">Lesson 03</p>
+    <h1>A tool advertisement is not permission.</h1>
+    <p><code>tools/list</code> returns transactional metadata under <code>_meta["org.agenttxprotocol/transaction"]</code>. Catalogs may also carry the alias <code>x-atp-transaction</code>. The proxy copies the signed definition into <code>_meta</code>. It does not authorize a call from either annotation. If the manifest does not name the tool, the call does not run.</p>
+    <h2>The inventory example</h2>
+    <p>The compatibility shape lives in <code>spec/examples/transfer-inventory.tool.json</code>. The forward call moves stock. The compensation calls the same tool with the warehouses swapped and a new transfer id.</p>
+    <pre>{
+  "reversibility": "COMPENSATABLE",
+  "idempotencyKeyPath": "$.input.transfer_id",
+  "compensation": {
+    "tool": "transfer_inventory",
+    "argumentMapping": {
+      "transfer_id": "'comp_' + input.transfer_id",
+      "sku": "input.sku",
+      "qty": "input.qty",
+      "source_wh": "input.target_wh",
+      "target_wh": "input.source_wh"
+    },
+    "maxRetries": 5,
+    "onCompensationFailure": "ESCALATE_HITL"
+  }
+}</pre>
+    <p>Mapping values are expressions. They can read <code>input</code>, <code>output</code>, and <code>tx.id</code>. There is no I/O. A <code>COMPENSATABLE</code> tool with an empty mapping is rejected when the manifest is opened.</p>
+    <h2>The idempotency key is not your business key</h2>
+    <p>After the caller’s arguments pass schema validation, the engine injects:</p>
+    <pre>idempotency_key = txId + ":" + stepIndex + ":" + sha256(canonical(arguments)).substring(0, 32)</pre>
+    <p>The hash covers the arguments before the key is added, so a schema with <code>additionalProperties: false</code> still accepts the payload the agent sent. <code>idempotencyKeyPath</code> is stored beside that key as a business identifier. A dotted path deeper than one field is ignored. Compensation uses <code>comp:</code> plus the forward key plus the attempt number, and that value overwrites any mapped <code>idempotency_key</code>.</p>
+    <p>The client supplies <code>txId</code>, 1 to 80 characters from <code>[A-Za-z0-9_.:-]</code>. The same id and the same plan hash returns the recorded result. The same id with a different plan is <code>AtpIdempotencyConflict</code> (−31807).</p>
+    <h2>Sign the manifest</h2>
+    <p>The document is <code>{ payload, signature }</code>. The signature is Ed25519 over the canonical JSON of <code>payload</code>. Canonical form sorts object keys, emits no insignificant whitespace, and writes <code>10</code> rather than <code>1E+1</code>.</p>
+    <pre>java -jar mcp-tx-proxy/target/tx-engine.jar keys
+java -jar mcp-tx-proxy/target/tx-engine.jar sign --kid admin --private &lt;base64&gt; --payload manifest.json</pre>
+    <p>The payload needs <code>manifestId</code>, a non-empty <code>tools</code> array, and optional <code>rules</code>. Each tool has <code>name</code>, an object <code>inputSchema</code>, and a <code>transaction</code> object. The adapter is <code>oltp</code>, <code>lakehouse</code>, or <code>api</code>. An API tool with dry-run left on must include a <code>dryRunExample</code> object. Dry-run defaults to true unless the boolean <code>false</code> is set.</p>
+    <div class="callout">Unknown kid, a bad signature, a duplicate tool name, a missing compensation, or a rule whose <code>onFail</code> is neither <code>DENY</code> nor <code>PAUSE</code> rejects the whole manifest. The engine does not start with a half-trusted catalog.</div>
+    <p><a href="04-policy-and-approval.html">Next: stop a plan that touches too much.</a></p>
+  </div>
+</body>
+</html>

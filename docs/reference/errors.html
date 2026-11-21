@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Errors — Reverta</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="states.html">States</a><a href="commands.html">Commands</a></div>
+    </nav>
+    <p class="kicker">Reference</p>
+    <h1>Error codes sit outside the MCP range.</h1>
+    <p>JSON-RPC parse failures are <code>-32700</code>. A request that is not a 2.0 object is <code>-32600</code>. An unknown method is <code>-32601</code>. Missing MCP <code>_meta</code> is <code>-32602</code>. Application codes are outside <code>-32768</code> through <code>-32000</code>, so they do not collide with MCP’s <code>-32000</code> to <code>-32099</code> band.</p>
+    <table>
+      <tr><th>Code</th><th>Name</th><th>When you see it</th></tr>
+      <tr><td>−31801</td><td>AtpInvalidTransaction</td><td>Illegal state edge, bad transaction id, empty plan, live replay requested, a cycle sealed as rollback.</td></tr>
+      <tr><td>−31802</td><td>AtpPolicyDenied</td><td>A blast-radius rule denied the diff.</td></tr>
+      <tr><td>−31803</td><td>AtpUnknownOutcome</td><td>The effect cannot be confirmed, or abort was asked to guess.</td></tr>
+      <tr><td>−31804</td><td>AtpCompensationFailed</td><td>The inverse failed and retries are exhausted. The hold waits for <code>RETRY</code>.</td></tr>
+      <tr><td>−31805</td><td>AtpIrreversibleBlocked</td><td>A live irreversible step cannot be undone. It is orphaned and the transaction waits.</td></tr>
+      <tr><td>−31806</td><td>AtpReplayDivergence</td><td>A recorded transition is not a legal edge.</td></tr>
+      <tr><td>−31807</td><td>AtpIdempotencyConflict</td><td>The same <code>txId</code> arrived with a different plan hash.</td></tr>
+      <tr><td>−31808</td><td>AtpApprovalRequired</td><td>The transaction is parked for a person.</td></tr>
+      <tr><td>−31809</td><td>AtpManifestRejected</td><td>Signature, tool definition, or rule failed closed.</td></tr>
+      <tr><td>−31810</td><td>AtpArgumentInvalid</td><td>Arguments failed the schema profile. The idempotency key had not been injected yet.</td></tr>
+      <tr><td>−31811</td><td>AtpToolUnregistered</td><td>The signed manifest has no such tool.</td></tr>
+      <tr><td>−31812</td><td>AtpLedgerTampered</td><td>Hash, previous link, or anchor check failed.</td></tr>
+    </table>
+    <div class="callout">A finished rollback is not one of these codes. The JSON-RPC result succeeds and <code>state</code> is <code>ROLLED_BACK</code>. Argument validation covers type, enum, string length, numeric bounds, array bounds, items, required, and additionalProperties. It is a profile of JSON Schema 2020-12, not a complete validator.</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Commands — Reverta</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="../tutorials/06-sdks.html">SDKs</a><a href="states.html">States</a></div>
+    </nav>
+    <p class="kicker">Reference</p>
+    <h1>The tx-engine command.</h1>
+    <p>The shaded jar is <code>mcp-tx-proxy/target/tx-engine.jar</code>. The entrypoint is <code>org.atp.proxy.TxEngineMain</code>.</p>
+    <table>
+      <tr><th>Command</th><th>What it does</th></tr>
+      <tr><td><code>demo --port 8080</code></td><td>Serves the operations console and <code>POST /mcp</code>. Same process as <code>serve</code>.</td></tr>
+      <tr><td><code>stdio</code></td><td>Reads one JSON-RPC object per line and writes one response per line.</td></tr>
+      <tr><td><code>keys</code></td><td>Prints a new Ed25519 public key, then the private key, both base64.</td></tr>
+      <tr><td><code>sign --kid --private --payload</code></td><td>Signs a manifest payload file.</td></tr>
+      <tr><td><code>replay --tx --wal-dir --sandbox --up-to-step</code></td><td>Walks a recorded transaction. <code>--sandbox</code> is required.</td></tr>
+      <tr><td><code>chaos --out file.csv</code></td><td>Writes the recovery comparison. Parent directories are created.</td></tr>
+    </table>
+    <h2>Environment</h2>
+    <table>
+      <tr><th>Variable</th><th>Effect</th></tr>
+      <tr><td><code>ATP_JDBC_URL</code></td><td>Journal in JDBC. H2 and PostgreSQL are on the classpath of the shaded jar.</td></tr>
+      <tr><td><code>ATP_JDBC_USER</code></td><td>JDBC user. Empty when unset.</td></tr>
+      <tr><td><code>ATP_JDBC_PASSWORD</code></td><td>JDBC password. Empty when unset.</td></tr>
+      <tr><td><code>ATP_WAL_DIR</code></td><td>File journal, used only when no JDBC URL is set. Writes <code>wal.bin</code> and <code>wal.anchor</code>.</td></tr>
+    </table>
+    <h2>HTTP routes on the demo</h2>
+    <ul>
+      <li><code>GET /</code> — the operations console.</li>
+      <li><code>POST /mcp</code> — JSON-RPC. One SSE event when <code>Accept</code> contains <code>text/event-stream</code>.</li>
+      <li><code>GET /api/ledger</code> — the hash chain wrapped as a <code>tx/ledger</code> result.</li>
+      <li><code>POST /api/demo/rollback</code> — the three-step failure, transaction <code>ui-rollback</code>.</li>
+      <li><code>POST /api/demo/approve-setup</code> — parks <code>send_wire</code>. Send <code>{"txId":"ui-wire-1"}</code> or omit it to reuse <code>ui-wire</code>.</li>
+      <li><code>POST /api/demo/decision</code> — body <code>{"txId","decision"}</code> with <code>APPROVE</code>, <code>REJECT</code>, or <code>RETRY</code>.</li>
+    </ul>
+    <h2>Build gates</h2>
+    <pre>mvn -B verify
+cd sdks/python
+python -m coverage run --source=agent_tx -m pytest
+python -m coverage report --fail-under=100</pre>
+    <p>Java 21 is required. <code>mvn verify</code> fails unless JaCoCo reports a line-coverage ratio of 1.00 for the engine, the proxy (the process entrypoint is excluded), and the Java SDK.</p>
+  </div>
+</body>
+</html>

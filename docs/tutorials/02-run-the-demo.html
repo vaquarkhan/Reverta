@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02 — Run the demo</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <div class="wrap prose">
+    <nav class="top">
+      <strong><a href="../index.html">Reverta</a></strong>
+      <div class="links"><a href="01-why-rollback.html">Previous</a><a href="03-declare-a-tool.html">Next</a></div>
+    </nav>
+    <p class="kicker">Lesson 02</p>
+    <h1>Run the three-step rollback.</h1>
+    <p>You need JDK 21 and Maven. The demo process uses an in-memory log, so Docker is optional.</p>
+    <pre>mvn -B -pl mcp-tx-proxy -am package -DskipTests
+java -jar mcp-tx-proxy/target/tx-engine.jar demo --port 8080</pre>
+    <p>On Windows, <code>examples/demo.ps1</code> points <code>JAVA_HOME</code> at Temurin 21 and starts the same jar. Open <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a>.</p>
+    <h2>What the rollback button does</h2>
+    <ol>
+      <li><code>adjust_ledger</code> moves 100 from account A to B. The mutation runs on a schema or copy-on-write branch. The main balances stay put until publish.</li>
+      <li><code>move_stock</code> adds two units of SKU-1 on a catalog branch. Unchanged rows are shared with the previous snapshot.</li>
+      <li><code>dispatch_carrier</code> is a compensatable API call. Its shadow returns the recorded dry-run example. The live handler returns HTTP 500.</li>
+    </ol>
+    <p>Policy allows the plan: two of four ledger accounts change, which is under the 75 percent row threshold, and the money delta is 100, under the 1,000 limit. After the carrier fails, compensation restores the ledger map and the lakehouse snapshot. The pill reads <code>ROLLED_BACK</code>. The hash chain grows through shadow, policy, live attempts, and <code>compensate-2</code>, <code>compensate-1</code>, <code>compensate-0</code>.</p>
+    <h2>Park a wire</h2>
+    <p><strong>Park an irreversible wire</strong> starts <code>send_wire</code>. The tool is <code>IRREVERSIBLE</code>, so an allow from policy still pauses. The state is <code>ESCALATED_HITL</code> and the hold reason is <code>APPROVAL_IRREVERSIBLE</code>. Each click uses a new transaction id, <code>ui-wire-1</code>, <code>ui-wire-2</code>, and so on.</p>
+    <ul>
+      <li><strong>Approve parked wire</strong> commits that one live call.</li>
+      <li><strong>Reject parked wire</strong> compensates. Nothing was published, so the transaction ends <code>ROLLED_BACK</code>.</li>
+      <li>Approving or rejecting when nothing is parked shows “Park a wire first.”</li>
+    </ul>
+    <h2>Keep the log</h2>
+    <p>Set <code>ATP_WAL_DIR</code> to a directory and the same demo writes <code>wal.bin</code> plus an anchor file. Set <code>ATP_JDBC_URL</code>, <code>ATP_JDBC_USER</code>, and <code>ATP_JDBC_PASSWORD</code> to use PostgreSQL instead. <code>examples/docker-compose.yml</code> does that. SQL for the demo ledger still runs on the in-memory adapters unless you point a real workload at JDBC. The compose file is the durable journal, not a Neon branch.</p>
+    <div class="callout">The in-process lakehouse is the reference write-audit-publish shape: immutable snapshots and a pointer swing. It is not an Iceberg manifest writer. Nessie and Neon clients create and delete branches around a transaction. They do not rewrite the JDBC URL.</div>
+    <p><a href="03-declare-a-tool.html">Next: describe a tool the engine is willing to compensate.</a></p>
+  </div>
+</body>
+</html>
