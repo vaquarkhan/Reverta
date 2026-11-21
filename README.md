@@ -14,7 +14,7 @@ Guides and the published site live in [`docs/`](docs/index.html):
 | [Errors](docs/reference/errors.html) | JSON-RPC codes −31801 through −31812 |
 | [Commands](docs/reference/commands.html) | `tx-engine`, environment variables, and demo routes |
 
-`docs/` is the GitHub Pages site, and `.github/workflows/pages.yml` publishes it. GitHub declined to enable Pages on this private repository with the current plan. Making the repository public lets that workflow serve [vaquarkhan.github.io/Reverta](https://vaquarkhan.github.io/Reverta/). Until then, open `docs/index.html` directly.
+The repository is public. `.github/workflows/pages.yml` publishes `docs/` to [vaquarkhan.github.io/Reverta](https://vaquarkhan.github.io/Reverta/). The source of those pages is still [`docs/index.html`](docs/index.html).
 
 ## Layout
 
