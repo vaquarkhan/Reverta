@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300">
+  <rect width="900" height="300" fill="#fffaf2"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="36" y="48" fill="#5c564c" font-size="15">tableFraction('customer_ledger')</text>
+    <rect x="36" y="68" width="520" height="16" rx="8" fill="#f4efe4" stroke="#ddd4c4"/>
+    <rect x="36" y="68" width="260" height="16" rx="8" fill="#1d3b32"/>
+    <text x="36" y="112" fill="#1d3b32" font-size="15">0.50 of accounts touched · allowed under 0.75</text>
+
+    <text x="36" y="164" fill="#5c564c" font-size="15">financialDelta</text>
+    <rect x="36" y="184" width="520" height="16" rx="8" fill="#f4efe4" stroke="#ddd4c4"/>
+    <rect x="36" y="184" width="52" height="16" rx="8" fill="#1d3b32"/>
+    <text x="36" y="228" fill="#1d3b32" font-size="15">100 · allowed under 1,000</text>
+
+    <rect x="600" y="48" width="264" height="204" rx="16" fill="#fff6f3" stroke="#e4c7c0"/>
+    <text x="624" y="88" fill="#8d3b2f" font-size="15">After ALLOW</text>
+    <text x="624" y="128" fill="#1c1914" font-size="22">send_wire</text>
+    <text x="624" y="164" fill="#5c564c" font-size="16">Irreversible upgrades</text>
+    <text x="624" y="188" fill="#5c564c" font-size="16">the decision to pause.</text>
+    <text x="624" y="224" fill="#8d3b2f" font-size="16">Hold for a person.</text>
+  </g>
+</svg>

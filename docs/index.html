@@ -7,12 +7,13 @@
   <meta name="description" content="Shadow, gate, commit, and roll back multi-step tool plans. An open specification and engine for MCP agents.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
   <div class="wrap">
     <nav class="top">
-      <strong><a href="index.html">Reverta</a></strong>
+      <strong><a href="index.html"><img src="assets/mark.svg" alt="" width="28" height="28">Reverta</a></strong>
       <div class="links">
         <a href="tutorials/index.html">Tutorials</a>
         <a href="reference/states.html">States</a>
@@ -26,18 +27,21 @@
         <p class="kicker">Agent Transaction Protocol</p>
         <h1>Undo for tools that were never meant to undo.</h1>
         <p class="lede">MCP 2026-07-28 tells an agent how to call a tool. It does not say what happens when step three fails after step one has already moved money. Reverta is the specification and the coordinator that sit in between.</p>
+        <p class="jump">
+          <a href="tutorials/01-why-rollback.html">Why agents need rollback</a>
+          <a href="tutorials/02-run-the-demo.html">Run the three-step demo</a>
+          <a href="tutorials/03-declare-a-tool.html">Declare a compensatable tool</a>
+        </p>
       </div>
-      <div class="card">
-        <p class="kicker">Start here</p>
-        <p><a href="tutorials/01-why-rollback.html">Why agents need rollback</a></p>
-        <p><a href="tutorials/02-run-the-demo.html">Run the three-step demo</a></p>
-        <p><a href="tutorials/03-declare-a-tool.html">Declare a compensatable tool</a></p>
-      </div>
+      <figure class="plate hero-plate">
+        <img src="assets/hero-saga.svg" alt="Three steps: a ledger transfer and a stock move apply, the carrier returns HTTP 500, and compensation restores the first two. The transaction ends ROLLED_BACK.">
+        <figcaption>The demo plan. Step three fails, and the first two effects are undone in reverse.</figcaption>
+      </figure>
     </header>
     <section class="grid">
-      <article class="card"><h3>Shadow first</h3><p>Branchable tools mutate a private branch. API tools return a recorded dry-run example. Production state waits for the policy gate.</p></article>
-      <article class="card"><h3>A person for the irreversible</h3><p>Sending a wire or an email cannot be inverted. Those steps pause, persist, and resume hours later without holding a thread.</p></article>
-      <article class="card"><h3>A hash for every hop</h3><p>Each ledger entry links to the previous SHA-256. Replay walks that chain in a sandbox and refuses to call live endpoints.</p></article>
+      <article class="card"><img class="glyph" src="assets/icon-branch.svg" alt=""><h3>Shadow first</h3><p>Branchable tools mutate a private branch. API tools return a recorded dry-run example. Production state waits for the policy gate.</p></article>
+      <article class="card"><img class="glyph" src="assets/icon-seal.svg" alt=""><h3>A person for the irreversible</h3><p>Sending a wire or an email cannot be inverted. Those steps pause, persist, and resume hours later without holding a thread.</p></article>
+      <article class="card"><img class="glyph" src="assets/icon-chain.svg" alt=""><h3>A hash for every hop</h3><p>Each ledger entry links to the previous SHA-256. Replay walks that chain in a sandbox and refuses to call live endpoints.</p></article>
     </section>
     <h2>Six lessons</h2>
     <div class="lessons">

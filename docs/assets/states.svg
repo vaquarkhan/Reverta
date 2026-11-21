@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420">
+  <rect width="900" height="420" fill="#fffaf2"/>
+  <g font-family="Georgia, 'Times New Roman', serif" font-size="13">
+    <rect x="20" y="36" width="120" height="44" rx="10" fill="#f4efe4" stroke="#1d3b32"/>
+    <text x="80" y="63" text-anchor="middle" fill="#1c1914">INIT</text>
+    <path d="M140 58 H168" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="176,58 166,53 166,63" fill="#8a6a32"/>
+
+    <rect x="184" y="36" width="150" height="44" rx="10" fill="#f4efe4" stroke="#1d3b32"/>
+    <text x="259" y="63" text-anchor="middle" fill="#1c1914">SHADOW</text>
+    <path d="M334 58 H362" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="370,58 360,53 360,63" fill="#8a6a32"/>
+
+    <rect x="378" y="36" width="140" height="44" rx="10" fill="#f4efe4" stroke="#1d3b32"/>
+    <text x="448" y="63" text-anchor="middle" fill="#1c1914">POLICY</text>
+    <path d="M518 58 H546" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="554,58 544,53 544,63" fill="#8a6a32"/>
+
+    <rect x="562" y="36" width="160" height="44" rx="10" fill="#f4efe4" stroke="#1d3b32"/>
+    <text x="642" y="63" text-anchor="middle" fill="#1c1914">COMMITTING</text>
+    <path d="M722 58 H750" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="758,58 748,53 748,63" fill="#8a6a32"/>
+
+    <rect x="766" y="36" width="114" height="44" rx="10" fill="#1d3b32"/>
+    <text x="823" y="63" text-anchor="middle" fill="#f4efe4">COMMITTED</text>
+
+    <path d="M259 80 V130" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="259,138 254,128 264,128" fill="#8a6a32"/>
+    <rect x="174" y="140" width="170" height="44" rx="10" fill="#fff6f3" stroke="#8d3b2f"/>
+    <text x="259" y="167" text-anchor="middle" fill="#1c1914">UNKNOWN</text>
+
+    <path d="M448 80 V130" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="448,138 443,128 453,128" fill="#8a6a32"/>
+    <rect x="368" y="140" width="160" height="44" rx="10" fill="#fff6f3" stroke="#8a6a32"/>
+    <text x="448" y="167" text-anchor="middle" fill="#1c1914">ESCALATED_HITL</text>
+
+    <path d="M642 80 V228" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="642,236 637,226 647,226" fill="#8a6a32"/>
+    <rect x="542" y="238" width="170" height="44" rx="10" fill="#f4efe4" stroke="#8d3b2f"/>
+    <text x="627" y="265" text-anchor="middle" fill="#1c1914">COMPENSATING</text>
+    <path d="M712 260 H748" stroke="#8a6a32" stroke-width="2"/>
+    <polygon points="756,260 746,255 746,265" fill="#8a6a32"/>
+    <rect x="764" y="238" width="116" height="44" rx="10" fill="#1d3b32"/>
+    <text x="822" y="265" text-anchor="middle" fill="#f4efe4" font-size="11">ROLLED_BACK</text>
+
+    <path d="M344 162 H368" stroke="#1d3b32" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="36" y="330" fill="#5c564c" font-size="16">Solid arrows are the path an operator watches.</text>
+    <text x="36" y="356" fill="#5c564c" font-size="16">UNKNOWN can return to shadow or commit after a read-only check.</text>
+    <text x="36" y="382" fill="#5c564c" font-size="16">A human hold can resume into commit, compensation, or rollback.</text>
+    <text x="36" y="408" fill="#8d3b2f" font-size="16">The table under this figure is the complete edge list.</text>
+  </g>
+</svg>

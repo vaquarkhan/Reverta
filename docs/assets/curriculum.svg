@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 160">
+  <rect width="900" height="160" fill="#fffaf2"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <path d="M70 78 H830" stroke="#ddd4c4" stroke-width="2"/>
+    <g fill="#1d3b32">
+      <circle cx="70" cy="78" r="16"/>
+      <circle cx="222" cy="78" r="16"/>
+      <circle cx="374" cy="78" r="16"/>
+      <circle cx="526" cy="78" r="16"/>
+      <circle cx="678" cy="78" r="16"/>
+      <circle cx="830" cy="78" r="16"/>
+    </g>
+    <g fill="#f4efe4" font-size="13" text-anchor="middle">
+      <text x="70" y="83">01</text>
+      <text x="222" y="83">02</text>
+      <text x="374" y="83">03</text>
+      <text x="526" y="83">04</text>
+      <text x="678" y="83">05</text>
+      <text x="830" y="83">06</text>
+    </g>
+    <g fill="#5c564c" font-size="14" text-anchor="middle">
+      <text x="70" y="118">Why</text>
+      <text x="222" y="118">Demo</text>
+      <text x="374" y="118">Declare</text>
+      <text x="526" y="118">Policy</text>
+      <text x="678" y="118">Ledger</text>
+      <text x="830" y="118">SDKs</text>
+    </g>
+  </g>
+</svg>

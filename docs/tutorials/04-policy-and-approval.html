@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>04 — Policy and approval</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
   <div class="wrap prose">
     <nav class="top">
-      <strong><a href="../index.html">Reverta</a></strong>
+      <strong><a href="../index.html"><img src="../assets/mark.svg" alt="" width="28" height="28">Reverta</a></strong>
       <div class="links"><a href="03-declare-a-tool.html">Previous</a><a href="05-ledger-replay-chaos.html">Next</a></div>
     </nav>
     <p class="kicker">Lesson 04</p>
     <h1>The gate runs before the live call.</h1>
+    <figure class="plate">
+      <img src="../assets/policy.svg" alt="A table fraction of 0.50 under a 0.75 limit, a money delta of 100 under 1,000, and an irreversible wire held for a person.">
+      <figcaption>The demo rules allow this plan. An irreversible tool still pauses after the allow.</figcaption>
+    </figure>
     <p>Shadow execution produces a diff: rows changed, schema changes, and a money total. Rules are expressions that must return a boolean. Anything else denies. An evaluation error denies. The demo manifest carries two rules.</p>
     <pre>tableFraction('customer_ledger') &lt;= 0.75    onFail DENY
 financialDelta &lt;= 1000                      onFail DENY</pre>

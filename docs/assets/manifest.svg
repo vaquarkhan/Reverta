@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300">
+  <rect width="900" height="300" fill="#fffaf2"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <rect x="28" y="36" width="280" height="228" rx="16" fill="#f4efe4" stroke="#ddd4c4" stroke-dasharray="6 6"/>
+    <text x="52" y="76" fill="#5c564c" font-size="15">tools/list annotation</text>
+    <text x="52" y="120" fill="#1c1914" font-size="22">Untrusted hint</text>
+    <text x="52" y="160" fill="#5c564c" font-size="16">_meta and</text>
+    <text x="52" y="184" fill="#5c564c" font-size="16">x-atp-transaction</text>
+    <text x="52" y="228" fill="#8d3b2f" font-size="16">Not authorization.</text>
+
+    <path d="M328 150 H430" fill="none" stroke="#8a6a32" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="430,150 416,142 416,158" fill="#8a6a32"/>
+    <text x="360" y="132" fill="#8a6a32" font-size="14">ignored</text>
+
+    <rect x="450" y="36" width="422" height="228" rx="16" fill="#f4efe4" stroke="#1d3b32"/>
+    <text x="474" y="76" fill="#1d3b32" font-size="15">Ed25519 manifest</text>
+    <text x="474" y="120" fill="#1c1914" font-size="22">Signed authority</text>
+    <text x="474" y="164" fill="#5c564c" font-size="16">reversibility, compensation,</text>
+    <text x="474" y="188" fill="#5c564c" font-size="16">idempotency path, schema</text>
+    <circle cx="800" cy="200" r="28" fill="none" stroke="#8a6a32" stroke-width="2"/>
+    <text x="800" y="206" text-anchor="middle" fill="#8a6a32" font-size="13">sig</text>
+  </g>
+</svg>

@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>03 — Declare a tool</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Source+Sans+3:wght@400;600&display=swap">
+  <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
   <div class="wrap prose">
     <nav class="top">
-      <strong><a href="../index.html">Reverta</a></strong>
+      <strong><a href="../index.html"><img src="../assets/mark.svg" alt="" width="28" height="28">Reverta</a></strong>
       <div class="links"><a href="02-run-the-demo.html">Previous</a><a href="04-policy-and-approval.html">Next</a></div>
     </nav>
     <p class="kicker">Lesson 03</p>
     <h1>A tool advertisement is not permission.</h1>
+    <figure class="plate">
+      <img src="../assets/manifest.svg" alt="A dashed card labeled untrusted hint, and a signed manifest card that holds reversibility, compensation, and the schema.">
+      <figcaption>Annotations travel with the catalog. The manifest is what the engine obeys.</figcaption>
+    </figure>
     <p><code>tools/list</code> returns transactional metadata under <code>_meta["org.agenttxprotocol/transaction"]</code>. Catalogs may also carry the alias <code>x-atp-transaction</code>. The proxy copies the signed definition into <code>_meta</code>. It does not authorize a call from either annotation. If the manifest does not name the tool, the call does not run.</p>
     <h2>The inventory example</h2>
     <p>The compatibility shape lives in <code>spec/examples/transfer-inventory.tool.json</code>. The forward call moves stock. The compensation calls the same tool with the warehouses swapped and a new transfer id.</p>

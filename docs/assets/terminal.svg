@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220">
+  <rect width="900" height="220" rx="16" fill="#101612"/>
+  <g font-family="Consolas, 'Cascadia Mono', monospace">
+    <circle cx="28" cy="28" r="6" fill="#8d3b2f"/>
+    <circle cx="48" cy="28" r="6" fill="#d7b56a"/>
+    <circle cx="68" cy="28" r="6" fill="#7dcea0"/>
+    <text x="28" y="78" fill="#7dcea0" font-size="16">tx-engine replay --tx demo-1 --up-to-step 2 --sandbox</text>
+    <text x="28" y="114" fill="#d7b56a" font-size="16">tx-engine chaos --out chaos.csv</text>
+    <text x="28" y="150" fill="#e8e0d0" font-size="16">tx-engine serve --port 8080</text>
+    <text x="28" y="186" fill="#9aa89a" font-size="16"># replay refuses a live endpoint</text>
+  </g>
+</svg>

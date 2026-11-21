@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220">
+  <rect width="900" height="220" fill="#fffaf2"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="36" y="42" fill="#5c564c" font-size="15">JSON-RPC and MCP reserved band</text>
+    <rect x="36" y="58" width="828" height="36" rx="10" fill="#f4efe4" stroke="#ddd4c4"/>
+    <text x="56" y="82" fill="#1c1914" font-size="16">-32700 parse · -32600 invalid · -32601 method · -32602 params · through -32000</text>
+    <text x="36" y="132" fill="#8d3b2f" font-size="15">Reverta application codes, outside that band</text>
+    <rect x="36" y="148" width="828" height="36" rx="10" fill="#fff6f3" stroke="#e4c7c0"/>
+    <text x="56" y="172" fill="#1c1914" font-size="16">-31801 invalid transaction through -31812 tampered ledger</text>
+  </g>
+</svg>

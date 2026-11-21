@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340">
+  <rect width="900" height="340" fill="#101612"/>
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <circle cx="36" cy="28" r="6" fill="#8d3b2f"/>
+    <circle cx="56" cy="28" r="6" fill="#d7b56a"/>
+    <circle cx="76" cy="28" r="6" fill="#7dcea0"/>
+    <text x="104" y="34" fill="#7dcea0" font-size="16">127.0.0.1:8080</text>
+    <rect x="28" y="64" width="250" height="52" rx="10" fill="#1c2820" stroke="#7dcea0"/>
+    <text x="48" y="96" fill="#f4efe4" font-size="16">Run rollback demo</text>
+    <rect x="292" y="64" width="270" height="52" rx="10" fill="#1c2820" stroke="#d7b56a"/>
+    <text x="312" y="96" fill="#f4efe4" font-size="16">Park an irreversible wire</text>
+    <rect x="576" y="64" width="140" height="52" rx="10" fill="#1c2820" stroke="#7dcea0"/>
+    <text x="604" y="96" fill="#f4efe4" font-size="16">Approve</text>
+    <rect x="730" y="64" width="140" height="52" rx="10" fill="#1c2820" stroke="#e07a62"/>
+    <text x="766" y="96" fill="#f4efe4" font-size="16">Reject</text>
+    <text x="36" y="164" fill="#d7b56a" font-size="14">HASH CHAIN</text>
+    <rect x="28" y="184" width="844" height="56" rx="10" fill="#18211c"/>
+    <text x="48" y="218" fill="#7dcea0" font-size="16">04  ui-rollback  compensate  ROLLED_BACK  9f3a…</text>
+    <rect x="28" y="252" width="844" height="56" rx="10" fill="#18211c"/>
+    <text x="48" y="286" fill="#e8e0d0" font-size="16">03  ui-rollback  dispatch_carrier  COMPENSATING  11c0…</text>
+  </g>
+</svg>
