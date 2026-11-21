@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenttxprotocol.org/schema/ledger-entry.schema.json",
+  "title": "ATP ledger entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "seq", "txId", "stepId", "prevEntrySha256", "agentReasoningHash", "toolName",
+    "sanitizedInput", "preStatePointer", "postStatePointer", "compensationStatus",
+    "state", "entryHash"
+  ],
+  "properties": {
+    "seq": { "type": "integer", "minimum": 0 },
+    "txId": { "type": "string" },
+    "stepId": { "type": "string" },
+    "prevEntrySha256": { "type": "string", "minLength": 64, "maxLength": 64 },
+    "agentReasoningHash": { "type": "string" },
+    "toolName": { "type": "string" },
+    "sanitizedInput": {},
+    "preStatePointer": { "type": "string" },
+    "postStatePointer": { "type": "string" },
+    "compensationStatus": { "enum": ["NOT_APPLICABLE", "PENDING", "SUCCEEDED", "DISCARDED"] },
+    "state": {
+      "enum": [
+        "INIT", "SHADOW_EXECUTING", "POLICY_EVAL", "COMMITTING", "COMMITTED",
+        "UNKNOWN_RECONCILING", "COMPENSATING", "ROLLED_BACK", "ESCALATED_HITL"
+      ]
+    },
+    "entryHash": { "type": "string", "minLength": 64, "maxLength": 64 }
+  }
+}

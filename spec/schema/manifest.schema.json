@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agenttxprotocol.org/schema/manifest.schema.json",
+  "title": "Signed ATP policy manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "signature"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": ["manifestId", "tools"],
+      "properties": {
+        "manifestId": { "type": "string", "minLength": 1 },
+        "tools": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "inputSchema", "transaction"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "inputSchema": { "type": "object" },
+              "transaction": { "$ref": "transaction.schema.json" }
+            }
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "expression", "onFail"],
+            "properties": {
+              "id": { "type": "string" },
+              "expression": { "type": "string" },
+              "onFail": { "enum": ["DENY", "PAUSE"] }
+            }
+          }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": ["alg", "kid", "sig"],
+      "properties": {
+        "alg": { "const": "Ed25519" },
+        "kid": { "type": "string" },
+        "sig": { "type": "string" }
+      }
+    }
+  }
+}

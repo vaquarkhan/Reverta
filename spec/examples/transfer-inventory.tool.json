@@ -1,0 +1,34 @@
+{
+  "name": "transfer_inventory",
+  "description": "Moves stock units between warehouse locations",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "transfer_id": { "type": "string" },
+      "sku": { "type": "string" },
+      "qty": { "type": "integer" },
+      "source_wh": { "type": "string" },
+      "target_wh": { "type": "string" }
+    },
+    "required": ["transfer_id", "sku", "qty", "source_wh", "target_wh"]
+  },
+  "x-atp-transaction": {
+    "reversibility": "COMPENSATABLE",
+    "blastRadiusTier": "HIGH",
+    "idempotencyKeyPath": "$.input.transfer_id",
+    "dryRunSupported": true,
+    "reconciliationTool": "get_transfer_status",
+    "compensation": {
+      "tool": "transfer_inventory",
+      "argumentMapping": {
+        "transfer_id": "'comp_' + input.transfer_id",
+        "sku": "input.sku",
+        "qty": "input.qty",
+        "source_wh": "input.target_wh",
+        "target_wh": "input.source_wh"
+      },
+      "maxRetries": 5,
+      "onCompensationFailure": "ESCALATE_HITL"
+    }
+  }
+}
